@@ -10,7 +10,7 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "start": ".output/server/index.mjs"
+    "start": "nuxt .output/server/index.mjs"
   },
   "dependencies": {
     "drizzle-kit": "^0.30.1",
