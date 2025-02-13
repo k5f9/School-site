@@ -340,4 +340,10 @@ a{
   }
 }
 
+p, h1, h2, h3, span {
+  letter-spacing: normal;
+  word-spacing: normal;
+}
+
+
 </style>
