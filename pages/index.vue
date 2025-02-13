@@ -190,6 +190,7 @@
   text-align: center;
   font-family: 'Balsamiq Sans';
   transition: 0.5s;
+  line-height: 32px;
 }
 
 .voiti-kak-uchitel:hover {
@@ -228,6 +229,7 @@ a{
   width: 900px;
   text-align: center;
   font-family: 'Balsamiq Sans';
+  line-height: 32px;
 }
 
 .podmain-text{
@@ -251,6 +253,7 @@ a{
   font-family: 'Balsamiq Sans';
   border-radius: 20px;
   padding: 10px;
+  line-height: 32px;
 }
 
 .descr2{
@@ -267,6 +270,7 @@ a{
   font-family: 'Balsamiq Sans';
   border-radius: 20px;
   padding: 10px;
+  line-height: 32px;
 }
 
 .descr3{
@@ -282,7 +286,7 @@ a{
   font-family: 'Balsamiq Sans';
   border-radius: 20px;
   padding: 10px;
-  line-height: 30px;
+  line-height: 32px;
 }
 
 .description{
