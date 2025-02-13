@@ -190,7 +190,7 @@
   text-align: center;
   font-family: 'Balsamiq Sans';
   transition: 0.5s;
-  line-height: 32px;
+  line-height: 20px;
 }
 
 .voiti-kak-uchitel:hover {
@@ -229,7 +229,7 @@ a{
   width: 900px;
   text-align: center;
   font-family: 'Balsamiq Sans';
-  line-height: 32px;
+  line-height: 40px;
 }
 
 .podmain-text{
