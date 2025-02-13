@@ -282,6 +282,7 @@ a{
   font-family: 'Balsamiq Sans';
   border-radius: 20px;
   padding: 10px;
+  line-height: 30px;
 }
 
 .description{
