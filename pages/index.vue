@@ -229,7 +229,7 @@ a{
   width: 900px;
   text-align: center;
   font-family: 'Balsamiq Sans';
-  line-height: 40px;
+  line-height: 45px;
 }
 
 .podmain-text{
