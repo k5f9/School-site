@@ -5,7 +5,6 @@ export default {
     host: '0.0.0.0', // Хост должен быть 0.0.0.0, чтобы Railway мог подключиться
   },
   compatibilityDate: '2024-11-01',
-  devtools: { enabled: true },
-  modules: ['@nuxtjs/tailwindcss', '@nuxtjs/google-fonts'],
+  devtools: { enabled: true }
 
 }

@@ -1,10 +1,9 @@
-
 {
   "name": "nuxt-app",
   "private": true,
   "type": "module",
   "scripts": {
-    "start":"node .output/server/index.mjs",
+    "start": "node .output/server/index.mjs",
     "build": "nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
@@ -12,9 +11,10 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "drizzle-kit": "^0.30.1",
-    "drizzle-orm": "^0.38.3",
+    "drizzle-kit": "^0.30.5",
+    "drizzle-orm": "^0.38.4",
     "git": "^0.1.5",
+    "mysql2": "^3.13.0",
     "nuxt": "^3.15.1",
     "postgres": "^3.4.5",
     "vue": "latest",
@@ -22,7 +22,6 @@
   },
   "devDependencies": {
     "@nuxtjs/google-fonts": "^3.2.0",
-    "@nuxtjs/tailwindcss": "^6.12.2",
     "typescript": "^5.7.3",
     "vue-tsc": "^2.1.10"
   }
