@@ -3,9 +3,11 @@ import {UserSchema, db} from "~/server/db";
 import {eq} from "drizzle-orm";
 
 interface Day {
-    den1: string;
-    class1: string;
-    urok1: string;
+    den: string;
+    urokA: string;
+    urokB: string;
+    urokV: string;
+    urokG: string;
 }
 
 export default defineEventHandler(async (event) => {
@@ -17,9 +19,11 @@ export default defineEventHandler(async (event) => {
     await db
         .insert(UserSchema)
         .values({
-            den: body.den1,
-            class: body.class1,
-            uroki: body.urok1,
+            den: body.den,
+            urokA: body.urokA,
+            urokB: body.urokB,
+            urokV: body.urokV,
+            urokG: body.urokG,
         })
         .execute();
 

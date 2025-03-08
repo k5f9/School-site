@@ -349,18 +349,73 @@
             </tr>
         </tbody>
     </table>
-
-
-    <button id="resetButton">Сбросить</button>
-    <button id="saveButton">Сохранить</button>
 </body>
 </template>
 
 <script setup>
 import { onMounted } from "vue";
+import { nextTick } from "vue"; 
+
+
+// Функция отправки в API
+const fetchUrok = async () => {
+    const response = await useFetch('/api/callback_urok', {
+        method: 'POST',
+    });
+    return response;
+};
+const session = await fetchUrok();
+const uroki = session.data;
+
+console.log(uroki.value[0].den);
+
+
 
 onMounted(() => {
     if (typeof window === "undefined") return;
+
+    console.log("1")
+
+
+
+    async function fillScheduleTable(scheduleData) {
+        const days = document.querySelectorAll("#lessonsTable tbody");
+
+        let rowIndexGlobal = -1; // Индекс строки в массиве данных
+
+        days.forEach(day => {
+            const rows = day.querySelectorAll("tr");
+
+            rows.forEach(row => {
+                let cells = row.querySelectorAll("td");
+
+                const lessonKeys = ["urokA", "urokB", "urokV", "urokG"]; // Ключи для ячеек
+
+                let lessonIndex = 0; // Индекс урока в массиве ключей
+
+                cells.forEach((cell, colIndex) => {
+                    if (cell.rowSpan > 1) return; // Пропускаем дни недели
+
+                    // Проверяем, есть ли данные в массиве
+                    if (scheduleData[rowIndexGlobal] && lessonKeys[lessonIndex]) {
+                        cell.textContent = scheduleData[rowIndexGlobal][lessonKeys[lessonIndex]];
+                    }
+
+                    lessonIndex++; // Переход к следующему уроку в строке
+                });
+
+                rowIndexGlobal++; // Переход к следующей строке в массиве
+            });
+        });
+    }
+
+
+
+    fillScheduleTable(uroki.value);
+
+
+
+
 
     const cells = document.querySelectorAll("td[draggable='true']");
     let draggedCell = null;
@@ -406,125 +461,7 @@ onMounted(() => {
 
     updateDragHandlers();
 
-    function saveTable() {
-        const table = document.querySelector("#lessonsTable tbody");
-        const rows = table.querySelectorAll("tr");
-        const data = [];
-
-        rows.forEach(row => {
-            const cells = row.querySelectorAll("td");
-            const rowData = [];
-            cells.forEach(cell => {
-                rowData.push(cell.textContent.trim());
-            });
-            data.push(rowData);
-        });
-
-        localStorage.setItem("scheduleData", JSON.stringify(data));
-        alert("Данные сохранены!");
-    }
-
-    function loadTable() {
-    const table = document.querySelector("#lessonsTable tbody");
-    const savedData = JSON.parse(localStorage.getItem("scheduleData"));
-
-    if (!savedData) return;
-
-    // Очищаем таблицу перед загрузкой
-    table.innerHTML = "";
-
-    savedData.forEach(rowData => {
-        const newRow = document.createElement("tr");
-
-        rowData.forEach(cellData => {
-            const newCell = document.createElement("td");
-            newCell.textContent = cellData;
-            newCell.setAttribute("draggable", "true");
-            newRow.appendChild(newCell);
-        });
-
-        table.appendChild(newRow);
-    });
-
-    updateDragHandlers(); // Пересоздаем обработчики после загрузки
-}
-
-
-    document.getElementById("saveButton").onclick = saveTable;
-    loadTable();
-
-    function createLissen() {
-        const letter = document.querySelector("#letter").value.trim();
-        const lishour = document.querySelector("#lissen-hour").value.trim();
-
-        if (!letter || !lishour) {
-            alert("Не все поля заполнены!");
-            return;
-        }
-
-        const table = document.querySelector("#lessonsTable");
-
-        let colIndex;
-        switch (letter) {
-            case "А":
-                colIndex = 1;
-                break;
-            case "Б":
-                colIndex = 2;
-                break;
-            case "В":
-                colIndex = 3;
-                break;
-            case "Г":
-                colIndex = 4;
-                break;
-            default:
-                alert("Некорректная буква класса!");
-                return;
-        }
-
-        const rowIndex = 2;
-        const cell = table.rows[rowIndex]?.cells[colIndex];
-        if (cell) {
-            cell.textContent = lishour;
-        } else {
-            alert("Ячейка не найдена!");
-        }
-    }
-
-
-    const originalData = [
-        { day: "Понедельник", class1: "Математика", class2: "Русский язык" },
-        { day: "Вторник", class1: "Физика", class2: "Литература" },
-    ];
-
-    function resetTable() {
-        const tableBody = document.querySelector("#lessonsTable tbody");
-        tableBody.innerHTML = "";
-
-        originalData.forEach(rowData => {
-            const newRow = document.createElement("tr");
-            const dayCell = document.createElement("td");
-            const class1Cell = document.createElement("td");
-            const class2Cell = document.createElement("td");
-
-            dayCell.textContent = rowData.day;
-            class1Cell.textContent = rowData.class1;
-            class2Cell.textContent = rowData.class2;
-
-            newRow.appendChild(dayCell);
-            newRow.appendChild(class1Cell);
-            newRow.appendChild(class2Cell);
-            tableBody.appendChild(newRow);
-        });
-
-        localStorage.removeItem("scheduleData");
-        alert("Данные сброшены!");
-    }
-
-    document.getElementById("resetButton").onclick = resetTable;
-
-    document.getElementById("randomizeSchedule").onclick = () => {
+    document.getElementById("randomizeSchedule").onclick = async () => {
         const subjects = ["Математика", "Физика", "Химия", "История", "География", "Биология", "Информатика", "Литература", "Иностранный язык", "Физкультура"];
         const days = document.querySelectorAll("#lessonsTable tbody");
         const maxLessonsPerDay = 7;
@@ -580,6 +517,87 @@ onMounted(() => {
                 });
             });
         });
+        const rows = document.querySelectorAll("tr"); 
+        let currentDay = ""; // Для хранения текущего дня недели
+        let lessonsData = []; // Массив для хранения всех данных
+
+        rows.forEach((tr) => {
+            let firstTd = tr.querySelector("td");
+
+            if (firstTd && firstTd.getAttribute("rowspan") === "8") { 
+                currentDay = firstTd.textContent.trim(); // Запоминаем день
+            }
+
+            let lessons = [...tr.querySelectorAll("td")]
+                .filter(td => td.getAttribute("rowspan") !== "8")
+                .map(td => td.textContent.trim());
+
+            if (lessons.length > 0 & currentDay !== "") { 
+                lessonsData.push({
+                    den: currentDay,
+                    urokA: lessons[0] || "",
+                    urokB: lessons[1] || "",
+                    urokV: lessons[2] || "",
+                    urokG: lessons[3] || "",
+                });
+                // console.log("Обнаружен день:", currentDay);
+                // console.log("Данные строки:", lessons);
+                // console.log("Формируемый объект:", {
+                // den: currentDay,
+                // urokA: lessons[0] || "",
+                // urokB: lessons[1] || "",
+                // urokV: lessons[2] || "",
+                // urokG: lessons[3] || "",
+                // });
+            }
+            
+            
+        });
+
+        // Функция отправки в API
+        const sendLessonsToDB = async () => { 
+            try {
+                const response = await $fetch('/api/clear_ur', {
+                        method: 'POST'
+                    });
+                    console.log('очистка1', response);
+                for (const lesson of lessonsData) {
+                            
+                    const response = await $fetch('/api/add_urok', {
+                            method: 'POST',
+                            body: {
+                                den: lesson.den,
+                                urokA: lesson.urokA,
+                                urokB: lesson.urokB,
+                                urokV: lesson.urokV,
+                                urokG: lesson.urokG
+                            }
+                        });
+                        console.log('Успешно отправлено:', response);
+                }
+            } catch (error) {
+                console.error('Ошибка при отправке:', error);
+            }
+        };
+        // Запускаем отправку
+        sendLessonsToDB();
+
+
+        // const updateTable = async () => {
+        //     for (const les of uroki) {
+        //         if (firstTd && firstTd.getAttribute("rowspan") === "8") { 
+        //             currentDay = firstTd.textContent.trim(); // Запоминаем день
+        //         }
+
+        //         if (currentDay == les )
+        //     }
+        // };
+        // updateTable();
+
+
+
+        
+
     };
 });
 </script>

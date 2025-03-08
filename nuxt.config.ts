@@ -1,10 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-export default {
-  server: {
-    port: process.env.PORT || 3000, // Используем PORT из окружения или 3000 по умолчанию
-    host: '0.0.0.0', // Хост должен быть 0.0.0.0, чтобы Railway мог подключиться
-  },
+export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
-  devtools: { enabled: true }
-
-}
+  devtools: { enabled: true },
+  modules: ['@pinia/nuxt']
+})
