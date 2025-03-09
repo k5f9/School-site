@@ -3,7 +3,7 @@ import {UserSchema, db} from "~/server/db";
 import {eq} from "drizzle-orm";
 
 export default defineEventHandler(async (event) => {
-    console.log('Запрос получен! Хуй');
+    console.log('Запрос получен!');
 
     const result = await db
         .select()

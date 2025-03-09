@@ -572,6 +572,10 @@ onMounted(() => {
             } catch (error) {
                 console.error('Ошибка при отправке:', error);
             }
+
+            let sohr = document.getElementById("addSubject");
+
+            sohr.textContent = "сохранилось";
         };
         // Запускаем отправку
         sendLessonsToDB();
