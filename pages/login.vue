@@ -129,7 +129,7 @@ form {
     padding-bottom: 0;
     display: flex;
     flex-direction: column;
-    line-height: 0.1px;
+    line-height: 0px;
 }
 
 /* Стили для остальных элементов */
@@ -166,7 +166,7 @@ input {
     margin-top: 30px;
     background-color: white;
     border: none;
-    margin-left: 190px;
+    margin-left: 180px;
     transition: 0.5s;
 }
 
