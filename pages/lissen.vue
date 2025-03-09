@@ -379,39 +379,33 @@ onMounted(() => {
 
 
     async function fillScheduleTable(scheduleData) {
-        const days = document.querySelectorAll("#lessonsTable tbody");
+        const days = document.querySelectorAll("#lessonsTable tbody tr"); // Берем все строки
 
-        let rowIndexGlobal = -1; // Индекс строки в массиве данных
+        let rowIndex = 0; // Индекс строки в массиве данных
 
-        days.forEach(day => {
-            const rows = day.querySelectorAll("tr");
+        days.forEach(row => {
+            let cells = row.querySelectorAll("td");
+            const lessonKeys = ["urokA", "urokB", "urokV", "urokG"];
+            let lessonIndex = 0;
 
-            rows.forEach(row => {
-                let cells = row.querySelectorAll("td");
+            // Если строка относится к дню недели (проверяем по первому столбцу)
+            if (cells.length === 1) {
+                return; // Пропускаем строки с днями недели
+            }
 
-                const lessonKeys = ["urokA", "urokB", "urokV", "urokG"]; // Ключи для ячеек
-
-                let lessonIndex = 0; // Индекс урока в массиве ключей
-
-                cells.forEach((cell, colIndex) => {
-                    if (cell.rowSpan > 1) return; // Пропускаем дни недели
-
-                    // Проверяем, есть ли данные в массиве
-                    if (scheduleData[rowIndexGlobal] && lessonKeys[lessonIndex]) {
-                        cell.textContent = scheduleData[rowIndexGlobal][lessonKeys[lessonIndex]];
-                    }
-
-                    lessonIndex++; // Переход к следующему уроку в строке
-                });
-
-                rowIndexGlobal++; // Переход к следующей строке в массиве
+            cells.forEach((cell, colIndex) => {
+                if (lessonIndex < lessonKeys.length && scheduleData[rowIndex]) {
+                    cell.textContent = scheduleData[rowIndex][lessonKeys[lessonIndex]];
+                }
+                lessonIndex++;
             });
+
+            rowIndex++; // Переход к следующей строке в массиве
         });
     }
 
-
-
     fillScheduleTable(uroki.value);
+
 
 
 
