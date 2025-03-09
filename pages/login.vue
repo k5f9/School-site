@@ -129,7 +129,7 @@ form {
     padding-bottom: 0;
     display: flex;
     flex-direction: column;
-    line-height: 30px;
+    line-height: 10px;
 }
 
 /* Стили для остальных элементов */
